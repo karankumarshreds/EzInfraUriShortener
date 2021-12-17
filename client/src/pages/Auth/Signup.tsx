@@ -1,6 +1,6 @@
 import React from 'react';
 import './Signup.css';
-import { ColorModeContext } from '../context/theme';
+import { ColorModeContext } from 'context/theme';
 import { useRequest } from 'hooks/useRequest';
 // material ui components
 import TextField from '@mui/material/TextField';
@@ -79,7 +79,7 @@ const Signup: React.FC = () => {
         }}>
         <div className="wrapper">
           <Typography className="box" sx={{ color: 'text.primary', mb: 1, fontWeight: 600, textAlign: 'center' }} variant="h4">
-            signup{' '}
+            Dyte.io
           </Typography>
         </div>
         {errors && errors.length > 0 && (
