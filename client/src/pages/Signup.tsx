@@ -1,12 +1,20 @@
 import React from 'react';
 import './Signup.css';
 import { ColorModeContext } from '../context/theme';
-import axios from 'axios';
 import { useRequest } from 'hooks/useRequest';
 // material ui components
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import { Button, Typography } from '@mui/material';
+
+type Field = 'firstName' | 'lastName' | 'email' | 'password';
+
+const fields: { field: Field; label: string }[] = [
+  { field: 'firstName', label: 'First Name' },
+  { field: 'lastName', label: 'Last Name' },
+  { field: 'email', label: 'Email' },
+  { field: 'password', label: 'Password' },
+];
 
 const Signup: React.FC = () => {
   const colorMode = React.useContext(ColorModeContext);
@@ -36,7 +44,24 @@ const Signup: React.FC = () => {
     makeRequest();
   };
 
-  console.log(errors);
+  const renderTextFields = () => {
+    return fields.map((each: { field: Field; label: string }) => {
+      const { field, label } = each;
+      return (
+        <TextField
+          key={field}
+          label={label}
+          sx={{ color: 'button.primary', width: '100%', my: 1 }}
+          focused={colorMode.mode === 'dark'}
+          size="small"
+          value={state[field]}
+          onChange={(e) => changeHandler(field, e.target.value)}
+          error={errorsMap[field] ? true : false}
+          helperText={errorsMap[field]}
+        />
+      );
+    });
+  };
 
   return (
     <React.Fragment>
@@ -57,54 +82,17 @@ const Signup: React.FC = () => {
             signup{' '}
           </Typography>
         </div>
-        {errors && errors.length && (
+        {errors && errors.length > 0 && (
           <Typography textAlign={'center'} variant="subtitle2" color="red">
             {errors[0]}
           </Typography>
         )}
-        <TextField
-          label="First Name"
-          sx={{ color: 'button.primary', width: '100%', my: 1 }}
-          focused={colorMode.mode === 'dark'}
-          size="small"
-          value={state.firstName}
-          onChange={(e) => changeHandler('firstName', e.target.value)}
-          error={errorsMap['firstName'] ? true : false}
-          helperText={errorsMap['firstName']}
-        />
-        <TextField
-          label="Last Name"
-          sx={{ color: 'button.primary', width: '100%', my: 1 }}
-          focused={colorMode.mode === 'dark'}
-          size="small"
-          value={state.lastName}
-          onChange={(e) => changeHandler('lastName', e.target.value)}
-          error={errorsMap['lastName'] ? true : false}
-          helperText={errorsMap['lastName']}
-        />
-        <TextField
-          label="Mail"
-          sx={{ color: 'button.primary', width: '100%', my: 1 }}
-          focused={colorMode.mode === 'dark'}
-          size="small"
-          value={state.email}
-          onChange={(e) => changeHandler('email', e.target.value)}
-          error={errorsMap['email'] ? true : false}
-          helperText={errorsMap['email']}
-        />
-        <TextField
-          label="Password"
-          sx={{ color: 'button.primary', width: '100%', my: 1 }}
-          focused={colorMode.mode === 'dark'}
-          size="small"
-          value={state.password}
-          onChange={(e) => changeHandler('password', e.target.value)}
-          error={errorsMap['password'] ? true : false}
-          helperText={errorsMap['password']}
-        />
+        {renderTextFields()}
+
         <Button sx={{ width: '100%' }} variant="contained" onClick={submit}>
           Signup
         </Button>
+
         <Typography
           sx={{
             color: 'text.primary',

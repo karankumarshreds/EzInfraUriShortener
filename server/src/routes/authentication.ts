@@ -47,13 +47,11 @@ router.post(
     console.log('hjeer');
 
     if (!user) {
-      console.log('hjeer !!!!!');
       throw new NotAuthorizedError();
     }
 
     const validPassword = await validatePassword(user.password, password);
     if (!validPassword) {
-      console.log('hjeer !!!!!!!!!!!!!!!!!!!!!');
       throw new NotAuthorizedError();
     }
 
