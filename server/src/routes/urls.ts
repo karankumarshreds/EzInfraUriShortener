@@ -48,7 +48,7 @@ router.post(
     // check if the shortURL already exists or not for the logged in user
     const exists = await Url.findOne({ user: req.currentUser!.id, shortUrl });
     if (exists) {
-      throw new BadRequestError('URL suffix already in use', shortUrl);
+      throw new BadRequestError('URL suffix already in use', 'shortUrl');
     }
     const newUrl = Url.build({
       url,
