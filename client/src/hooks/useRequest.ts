@@ -24,14 +24,18 @@ export const useRequest = <T>(params: {
       setPending(false);
       const errorsArray: { message: string; field?: string }[] = error?.response?.data?.errors;
       if (errorsArray && errorsArray.length) {
-        setErrors(errorsArray.map((each) => each.message));
+        // setErrors(errorsArray.map((each) => each.message));
+        let err: string[] = [];
         let map: { [field: string]: string } = {};
         errorsArray.forEach((el) => {
           if (el.field) {
             map[el.field] = el.message;
+          } else {
+            err.push(el.message);
           }
         });
         setErrorsMap(map);
+        setErrors(err);
       } else setErrors(['Something went wrong']);
     }
   };

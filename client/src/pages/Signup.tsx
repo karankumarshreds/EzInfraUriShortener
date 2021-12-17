@@ -36,6 +36,8 @@ const Signup: React.FC = () => {
     makeRequest();
   };
 
+  console.log(errors);
+
   return (
     <React.Fragment>
       <Box
@@ -55,7 +57,11 @@ const Signup: React.FC = () => {
             signup{' '}
           </Typography>
         </div>
-        {pending && <h1>Loading...</h1>}
+        {errors && errors.length && (
+          <Typography textAlign={'center'} variant="subtitle2" color="red">
+            {errors[0]}
+          </Typography>
+        )}
         <TextField
           label="First Name"
           sx={{ color: 'button.primary', width: '100%', my: 1 }}
