@@ -3,7 +3,7 @@ import { UserPayload } from 'interfaces';
 
 interface IAuthContext {
   authState: UserPayload | null;
-  setAuthState: (data: UserPayload) => void;
+  setAuthState: (data: UserPayload | null) => void;
 }
 
 export const AuthContext = React.createContext<IAuthContext>({ authState: null, setAuthState: () => {} });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import './Signup.css';
 import { ColorModeContext } from 'context/theme';
 import { useRequest } from 'hooks/useRequest';
@@ -17,9 +17,9 @@ const fields: { field: Field; label: string }[] = [
   { field: 'password', label: 'Password' },
 ];
 
-const Signup: React.FC = () => {
+const Signup: React.FC = (props) => {
   const colorMode = React.useContext(ColorModeContext);
-  const { setAuthState } = React.useContext(AuthContext);
+  const { setAuthState, authState } = React.useContext(AuthContext);
 
   const [state, setState] = React.useState({
     firstName: '',
@@ -47,6 +47,10 @@ const Signup: React.FC = () => {
   const submit = async () => {
     makeRequest();
   };
+
+  if (authState) {
+    return <Navigate replace to="/" />;
+  }
 
   const renderTextFields = () => {
     return fields.map((each: { field: Field; label: string }) => {

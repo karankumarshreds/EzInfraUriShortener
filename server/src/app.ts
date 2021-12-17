@@ -26,7 +26,7 @@ app.use(
   cookieSession({
     // we do not need encrypted cookies
     signed: false,
-    // make sure to accept requests from only https
+    // to make sure to accept requests from only https
     // secure: process.env.NODE_ENV === 'PROD',
     secure: false,
   })

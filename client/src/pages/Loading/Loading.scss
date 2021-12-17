@@ -1,0 +1,73 @@
+// Variables
+
+$color-background: #fff;
+$color-text: #ddd;
+$color-feature: #5c5c5c;
+
+// Infinite Chars colors (Loading text color )
+@mixin infiniteCharColors($loopTimes) {
+  @for $i from 1 through $loopTimes {
+    &:nth-child(#{$i}) {
+      $delayTime: 100 * $i + ms;
+      display: inline-block;
+      animation-name: charColor;
+      animation-iteration-count: infinite;
+      animation-duration: 1s;
+      animation-delay: $delayTime;
+      animation-timing-function: ease;
+      animation-fill-mode: both;
+      backface-visibility: hidden;
+    }
+  }
+}
+@keyframes charColor {
+  0% {
+    color: lighten($color-text, 46%);
+  }
+  50% {
+    color: $color-feature;
+  }
+  100% {
+    color: lighten($color-text, 46%);
+  }
+}
+
+/* =========================================
+ LoadingScreen Style
+ =========================================*/
+
+.loadingScreen {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 900000;
+  overflow: hidden;
+  background: $color-background;
+
+  .loadingScreen__text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    text-align: center;
+    width: auto;
+    height: 100px;
+    color: $color-text;
+    text-transform: uppercase;
+    font-size: 30px;
+    .loadingScreen__text__span {
+      @include infiniteCharColors(9);
+      padding: 5px;
+      vertical-align: middle;
+    }
+  }
+}

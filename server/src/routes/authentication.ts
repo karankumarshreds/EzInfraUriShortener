@@ -17,14 +17,18 @@ const router = express.Router();
  */
 
 router.get('/current-user', currentUser, async (req: Request, res: Response) => {
-  if (!req.currentUser) {
-    throw new NotAuthorizedError();
+  if (!req.currentUser || !req.currentUser.id) {
+    console.log('A');
+    return res.send(null);
   } else {
+    console.log('B');
     const user = await User.findById(req.currentUser!.id);
     if (!user) {
-      return res.send({ currentUser: null });
+      console.log('C');
+      return res.send(null);
     } else {
-      return res.send({ currentUser: req.currentUser });
+      console.log('D');
+      return res.send({ ...user });
     }
   }
 });

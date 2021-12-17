@@ -1,5 +1,5 @@
-import axios from 'axios';
 import React from 'react';
+import { api } from 'api';
 
 // interface Params
 
@@ -19,7 +19,7 @@ export const useRequest = <T>(params: {
       setPending(true);
       setErrors(null);
       setErrorsMap({});
-      const response = (await axios[params.method](params.url, { ...params.payload })) as { data: T };
+      const response = (await api[params.method](params.url, { ...params.payload })) as { data: T };
       setPending(false);
       params.onSuccess(response.data);
     } catch (error: any) {
@@ -38,6 +38,7 @@ export const useRequest = <T>(params: {
         });
         setErrorsMap(map);
         setErrors(err);
+        params.onError();
       } else setErrors(['Something went wrong']);
     }
   };
