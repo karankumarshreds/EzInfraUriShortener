@@ -49,11 +49,7 @@ const App: React.FC = () => {
   });
 
   React.useEffect(() => {
-    const something = async () => {
-      await axios.get('http://localhost:5000/api/auth/current-user', { withCredentials: true });
-    };
-    something();
-    // makeRequest();
+    makeRequest();
   }, []);
 
   if (pending) return <Loading />;

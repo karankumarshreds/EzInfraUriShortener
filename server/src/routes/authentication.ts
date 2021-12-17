@@ -18,17 +18,13 @@ const router = express.Router();
 
 router.get('/current-user', currentUser, async (req: Request, res: Response) => {
   if (!req.currentUser || !req.currentUser.id) {
-    console.log('A');
     return res.send(null);
   } else {
-    console.log('B');
     const user = await User.findById(req.currentUser!.id);
     if (!user) {
-      console.log('C');
       return res.send(null);
     } else {
-      console.log('D');
-      return res.send({ ...user });
+      return res.send({ email: user.email, firstName: user.firstName, lastName: user.lastName, id: user.id });
     }
   }
 });
