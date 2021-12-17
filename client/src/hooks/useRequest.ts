@@ -17,6 +17,8 @@ export const useRequest = <T>(params: {
   const makeRequest = async () => {
     try {
       setPending(true);
+      setErrors(null);
+      setErrorsMap({});
       const response = (await axios[params.method](params.url, { ...params.payload })) as { data: T };
       setPending(false);
       params.onSuccess(response.data);

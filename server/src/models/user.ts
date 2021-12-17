@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { hashPassword } from '../common/password';
 
 interface Attrs {
   firstName: string;

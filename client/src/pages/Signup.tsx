@@ -5,7 +5,7 @@ import { useRequest } from 'hooks/useRequest';
 // material ui components
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import { Button, Typography } from '@mui/material';
+import { Button, CircularProgress, Typography } from '@mui/material';
 
 type Field = 'firstName' | 'lastName' | 'email' | 'password';
 
@@ -36,7 +36,7 @@ const Signup: React.FC = () => {
     onError: () => {},
   });
 
-  const changeHandler = (key: string, value: string) => {
+  const changeHandler = (key: Field, value: string) => {
     setState((old) => ({ ...old, [key]: value }));
   };
 
@@ -89,8 +89,8 @@ const Signup: React.FC = () => {
         )}
         {renderTextFields()}
 
-        <Button sx={{ width: '100%' }} variant="contained" onClick={submit}>
-          Signup
+        <Button sx={{ width: '100%' }} variant="contained" onClick={submit} disabled={pending}>
+          {pending ? <CircularProgress sx={{ width: 5 }} /> : 'Signup'}
         </Button>
 
         <Typography
