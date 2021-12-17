@@ -85,7 +85,7 @@ router.post(
   [
     body('firstName').toLowerCase().trim().isLength({ min: 1 }).withMessage('Firstname must be provided'),
     body('lastName').toLowerCase().trim().isLength({ min: 1 }).withMessage('Lastname must be provided'),
-    body('email').isEmail().toLowerCase().trim().withMessage('Email must be provided'),
+    body('email').isEmail().toLowerCase().trim().withMessage('Email must be valid'),
     body('password').toLowerCase().trim().isLength({ min: 8 }).withMessage('Password must at least 8 characters'),
   ],
   validateRequest,
