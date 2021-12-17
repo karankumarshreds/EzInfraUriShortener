@@ -1,5 +1,6 @@
 import React from 'react';
 import { ColorModeContext } from 'context/theme';
+import short from 'short-uuid';
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -7,6 +8,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import RotateLeftIcon from '@mui/icons-material/RotateLeft';
 import Grid from '@mui/material/Grid';
+import useRequest from 'hooks/useRequest';
+import { CircularProgress } from '@mui/material';
 
 type Field = 'url' | 'shortUrl';
 
@@ -15,6 +18,27 @@ const Main: React.FC = () => {
   const [state, setState] = React.useState<{ url: string; shortUrl: string }>({
     url: '',
     shortUrl: '',
+  });
+
+  const { pending, makeRequest, errors, errorsMap } = useRequest({
+    url: '/api/url',
+    method: 'post',
+    onSuccess: (data) => console.log(data),
+    payload: { ...state },
+    onError: () => {},
+  });
+
+  const {
+    pending: pendingUUID,
+    makeRequest: makeRequestUUID,
+    errors: errorsUUID,
+    errorsMap: errorsMapUUID,
+  } = useRequest({
+    url: '/api/url/generate',
+    method: 'get',
+    onSuccess: (data: string) => setState((old) => ({ ...old, shortUrl: data })),
+    payload: { ...state },
+    onError: () => {},
   });
 
   const changeHandler = (key: Field, value: string) => {
@@ -27,7 +51,7 @@ const Main: React.FC = () => {
         <Box
           sx={{
             boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.15);',
-            height: 400,
+            minHeight: 400,
             backgroundColor: `${colorMode.mode === 'light' ? '#fff' : '#14192e'}`,
             borderRadius: 2,
             pt: 6.5,
@@ -39,6 +63,11 @@ const Main: React.FC = () => {
           <Typography sx={{ color: 'text.primary', fontWeight: 600 }} variant="h4">
             Dyte.io Url Shortener
           </Typography>
+          {errors && errors.length > 0 && (
+            <Typography textAlign={'center'} variant="subtitle2" color="red">
+              {errors[0]}
+            </Typography>
+          )}
           <TextField
             // key={field}
             label="Enter the URL to shorten"
@@ -47,8 +76,8 @@ const Main: React.FC = () => {
             size="medium"
             value={state.url}
             onChange={(e) => changeHandler('url', e.target.value)}
-            // error={errorsMap['url'] ? true : false}
-            // helperText={errorsMap['url']}
+            error={errorsMap['url'] ? true : false}
+            helperText={errorsMap['url']}
           />
           <br />
           <br />
@@ -62,12 +91,12 @@ const Main: React.FC = () => {
               size="medium"
               value={state.shortUrl}
               onChange={(e) => changeHandler('shortUrl', e.target.value)}
-              // error={errorsMap['shortUrl'] ? true : false}
-              // helperText={errorsMap['shortUrl']}
+              error={errorsMap['shortUrl'] ? true : false}
+              helperText={errorsMap['shortUrl']}
             />
             <div style={{ width: '35%', display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-              <Button variant="outlined" sx={{ width: '100%', mr: 1, height: 52 }}>
-                or generate
+              <Button disabled={pendingUUID} variant="outlined" sx={{ width: '100%', mr: 1, height: 52 }} onClick={makeRequestUUID}>
+                {pendingUUID ? <CircularProgress /> : 'Or Generate'}
               </Button>
             </div>
           </div>
@@ -93,8 +122,8 @@ const Main: React.FC = () => {
           <br />
           <br />
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button variant="contained" sx={{ width: '30%', height: 52 }}>
-              Save
+            <Button disabled={pending} variant="contained" sx={{ width: '30%', height: 52 }} onClick={makeRequest}>
+              {pending ? <CircularProgress /> : 'Save'}
             </Button>
           </div>
         </Box>

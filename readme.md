@@ -8,6 +8,7 @@
 ## Features 
 
 ### Server:
+	- Recursive logic to generate unique url
 	- Custom error validation 
 	- Reusable code for request validation
 	- Unit tests 
@@ -18,3 +19,4 @@
 	- Light/Dark mode toggler 
 	- Form error validation
 	- React Context for state management
+	- Reusable hooks and components 
