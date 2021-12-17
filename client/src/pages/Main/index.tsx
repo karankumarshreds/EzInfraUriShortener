@@ -19,11 +19,15 @@ const Main: React.FC = () => {
     url: '',
     shortUrl: '',
   });
+  const [saved, setSaved] = React.useState(false);
 
   const { pending, makeRequest, errors, errorsMap } = useRequest({
     url: '/api/url',
     method: 'post',
-    onSuccess: (data) => console.log(data),
+    onSuccess: () => {
+      setState({ url: '', shortUrl: '' });
+      setSaved(true);
+    },
     payload: { ...state },
     onError: () => {},
   });
@@ -40,6 +44,7 @@ const Main: React.FC = () => {
     payload: { ...state },
     onError: () => {},
   });
+  console.log(state.shortUrl.length);
 
   const changeHandler = (key: Field, value: string) => {
     setState((oldState) => ({ ...oldState, [key]: value }));
@@ -113,16 +118,18 @@ const Main: React.FC = () => {
               sx={{ color: 'button.primary', flexGrow: 0.98 }}
               focused={colorMode.mode === 'dark'}
               size="medium"
-              // value={state.url + state.shortUrl}
               value={`${state.url}${state.url && state.url.slice(-1) !== '/' ? '/' : ''}${state.shortUrl}`}
-              // onChange={() => {}}
             />
           </div>
 
           <br />
           <br />
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button disabled={pending} variant="contained" sx={{ width: '30%', height: 52 }} onClick={makeRequest}>
+            <Button
+              disabled={pending || (state.url.length < 5 && state.shortUrl.length < 3) ? true : false}
+              variant="contained"
+              sx={{ width: '30%', height: 52 }}
+              onClick={makeRequest}>
               {pending ? <CircularProgress /> : 'Save'}
             </Button>
           </div>
