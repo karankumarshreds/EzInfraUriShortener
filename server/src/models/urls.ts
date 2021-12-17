@@ -9,6 +9,8 @@ interface Attrs {
 interface UrlDoc extends mongoose.Document, Attrs {
   views: number;
   uniqueViews: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface UrlModel extends mongoose.Model<UrlDoc> {
@@ -22,6 +24,8 @@ const schema = new mongoose.Schema(
     user: { type: mongoose.SchemaTypes.ObjectId, ref: 'User', required: true },
     views: { type: Number, default: 0 },
     uniqueViews: { type: Number, default: 0 },
+    createdAt: { type: Date, default: Date.now() },
+    updatedAt: { type: Date, default: Date.now() },
   },
   {
     toJSON: {

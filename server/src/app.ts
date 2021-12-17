@@ -7,6 +7,7 @@ import cookieSession from 'cookie-session';
 
 // routes
 import { authenticationRoutes } from './routes/authentication';
+import { urlRoutes } from './routes/urls';
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use(
 
 // authentication
 app.use('/api/auth', authenticationRoutes);
+app.use('/api/url', urlRoutes);
 
 // to catch all the errors
 app.use(errorHandler);
