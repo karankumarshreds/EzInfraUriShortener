@@ -1,5 +1,10 @@
 # URL Shortener
 
+
+## Preview 
+
+<img src="https://github.com/karankumarshreds/dyte/blob/master/static/landing.gif" width="1000"/>
+
 ## Stack 
 
 - Server: Node, Express, Typescript, MongoDB 
