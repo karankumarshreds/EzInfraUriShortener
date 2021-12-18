@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
+import { DeviceDetails } from '../interfaces';
 
 interface Attrs {
   url: string;
   user: string;
-  analytics: Object;
+  analytics: DeviceDetails;
 }
 
 interface VisitsDoc extends mongoose.Document, Attrs {}
@@ -29,7 +30,7 @@ const schema = new mongoose.Schema(
 );
 
 schema.statics.build = (attrs: Attrs) => {
-  return new Url(attrs);
+  return new Visits(attrs);
 };
 
-export const Url = mongoose.model<VisitsDoc, VisitsModel>('Visits', schema);
+export const Visits = mongoose.model<VisitsDoc, VisitsModel>('Visits', schema);

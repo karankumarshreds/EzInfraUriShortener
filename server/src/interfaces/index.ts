@@ -1,19 +1,4 @@
-export interface UserPayload {
-  firstName: string;
-  lastName: string;
-  email: string;
-  id: string;
-}
-
-export interface UrlDetails {
-  url: string;
-  shortUrl: string;
-  views: number;
-  uniqueViews: number;
-  id: string;
-}
-
-export interface DeviceDetails {
+export type DeviceDetails = {
   os: {
     name: string;
     short_name: string;
@@ -36,4 +21,4 @@ export interface DeviceDetails {
     brand: string;
     model: string;
   };
-}
+};

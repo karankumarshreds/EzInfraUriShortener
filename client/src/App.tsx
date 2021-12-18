@@ -20,6 +20,7 @@ import LandingPage from 'pages/Landing';
 import Loading from 'pages/Loading';
 import Analytics from 'pages/Analytics';
 import Main from 'pages/Main';
+import Redirect from 'pages/Redirect';
 
 const App: React.FC = () => {
   // main
@@ -71,6 +72,7 @@ const App: React.FC = () => {
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/signin" element={<Signin />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/:shortUrl" element={<Redirect />} />
               <Route path="/" element={authState ? <Main /> : <LandingPage />} />
             </Routes>
           </Container>

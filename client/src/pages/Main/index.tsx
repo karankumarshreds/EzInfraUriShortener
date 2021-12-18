@@ -44,7 +44,6 @@ const Main: React.FC = () => {
     payload: { ...state },
     onError: () => {},
   });
-  console.log(state.shortUrl.length);
 
   const changeHandler = (key: Field, value: string) => {
     setState((oldState) => ({ ...oldState, [key]: value }));
@@ -118,7 +117,8 @@ const Main: React.FC = () => {
               sx={{ color: 'button.primary', flexGrow: 0.98 }}
               focused={colorMode.mode === 'dark'}
               size="medium"
-              value={`${state.url}${state.url && state.url.slice(-1) !== '/' ? '/' : ''}${state.shortUrl}`}
+              // value={`${state.url}${state.url && state.url.slice(-1) !== '/' ? '/' : ''}${state.shortUrl}`}
+              value={`${window.location.origin}/${state.shortUrl}`}
             />
           </div>
 
@@ -126,7 +126,7 @@ const Main: React.FC = () => {
           <br />
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
-              disabled={pending || (state.url.length < 5 && state.shortUrl.length < 3) ? true : false}
+              disabled={pending || state.url.length < 5 || state.shortUrl.length < 3 ? true : false}
               variant="contained"
               sx={{ width: '30%', height: 52 }}
               onClick={makeRequest}>
