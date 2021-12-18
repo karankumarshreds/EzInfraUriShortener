@@ -1,9 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 // custom
 import Toggler from './Toggler';
 import { ColorModeContext } from 'context/theme';
 import { AuthContext } from 'context/auth';
+import { api } from 'api';
 // material ui components
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -21,15 +22,24 @@ const menuId = 'primary-search-account-menu';
 
 const Navbar = () => {
   const colorMode = React.useContext(ColorModeContext);
-  const { authState } = React.useContext(AuthContext);
+  const { authState, setAuthState } = React.useContext(AuthContext);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [signin, setSignin] = React.useState<boolean>(false);
   const isMenuOpen = Boolean(anchorEl);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const logout = async () => {
+    try {
+      await api.post('/api/auth/signout');
+
+      setAuthState(null);
+    } catch (error) {}
   };
 
   const renderMenu = (
@@ -50,7 +60,12 @@ const Navbar = () => {
       <MenuItem disabled onClick={handleMenuClose}>
         Profile
       </MenuItem>
-      <MenuItem sx={{ color: 'black' }} onClick={handleMenuClose}>
+      <MenuItem
+        sx={{ color: 'black' }}
+        onClick={() => {
+          logout();
+          handleMenuClose();
+        }}>
         Logout
       </MenuItem>
     </Menu>
@@ -92,9 +107,11 @@ const Navbar = () => {
               ))}
             </Box>
           ) : (
-            <Button variant="outlined" sx={{ ml: 1 }}>
-              Signin
-            </Button>
+            <Link style={{ textDecoration: 'none' }} to="/signin">
+              <Button variant="outlined" sx={{ ml: 1 }} onClick={() => setSignin(true)}>
+                Signin
+              </Button>
+            </Link>
           )}
 
           {authState && (

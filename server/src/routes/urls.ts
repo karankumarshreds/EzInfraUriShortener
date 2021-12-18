@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import mongoose from 'mongoose';
 import { DeviceDetails, ILocation } from '../interfaces';
 import axios from 'axios';
 import short from 'short-uuid';
@@ -21,7 +22,8 @@ router.get('/generate', currentUser, withAuth, async (req: Request, res: Respons
   // @ts-ignore
   const recursiveQuery = async (): Promise<string> => {
     const uuid = short.generate().slice(0, SHORT_URL_SUFFIX_LENGTH) as string;
-    const exists = await Url.findOne({ user: req.currentUser!.id, shortUrl: uuid });
+    // const exists = await Url.findOne({ user: req.currentUser!.id, shortUrl: uuid });
+    const exists = await Url.findOne({ shortUrl: uuid });
     if (exists && count < 11) {
       count++;
       recursiveQuery();
@@ -52,7 +54,9 @@ router.post(
   async (req: Request, res: Response) => {
     const { url, shortUrl } = req.body;
     // check if the shortURL already exists or not for the logged in user
-    const exists = await Url.findOne({ user: req.currentUser!.id, shortUrl });
+    // const exists = await Url.findOne({ user: req.currentUser!.id, shortUrl });
+    // check if the shortURL already exits
+    const exists = await Url.findOne({ shortUrl });
     if (exists) {
       throw new BadRequestError('URL suffix already in use', 'shortUrl');
     }
@@ -95,12 +99,34 @@ router.put(
  */
 
 router.get('/', currentUser, withAuth, async (req: Request, res: Response) => {
-  const urls = await Url.find({ user: req.currentUser!.id });
-  // 1. The number of unique visitors
-  // 2. The total number of page views
-  // 3. Device information
-  // 4. Some sort of address
-  return res.status(200).send(urls || []);
+  const data = await Url.aggregate([
+    // @ts-ignore
+    { $match: { user: mongoose.Types.ObjectId(req.currentUser!.id) } },
+    { $project: { _id: 0, id: '$_id', views: 1, createdAt: 1, url: 1, shortUrl: 1 } },
+    {
+      $lookup: {
+        from: 'visits',
+        localField: 'id',
+        foreignField: 'url',
+        as: 'visits',
+      },
+    },
+  ]);
+
+  /**
+   *
+   * url  | short | total visits | unique views
+   *
+   * graph
+   *
+   */
+
+  // const urls = await Url.find({ user: req.currentUser!.id }).sort({ createdAt: -1 });
+  // // 1. The number of unique visitors
+  // // 2. The total number of page views
+  // // 3. Device information
+  // // 4. Some sort of address
+  return res.status(200).send(data || []);
 });
 
 /**
@@ -108,9 +134,9 @@ router.get('/', currentUser, withAuth, async (req: Request, res: Response) => {
  * @method GET
  * @action Returns full mapped url details for the provided short url
  */
-
 router.get('/:short', currentUser, withAuth, async (req: Request, res: Response) => {
-  const url = await Url.findOne({ user: req.currentUser!.id, shortUrl: req.params.short });
+  // const url = await Url.findOne({ user: req.currentUser!.id, shortUrl: req.params.short });
+  const url = await Url.findOne({ shortUrl: req.params.short });
   if (!url) throw new NotFoundError();
   return res.status(200).send(url);
 });

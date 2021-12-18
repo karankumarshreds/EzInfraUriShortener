@@ -37,3 +37,7 @@ export interface DeviceDetails {
     model: string;
   };
 }
+
+export interface details {
+  devices: DeviceDetails[];
+}

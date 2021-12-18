@@ -46,8 +46,7 @@ const Redirect: React.FC = () => {
   if (pending) return <Loading text="redirecting" />;
 
   if (!pending && redirectUrl) {
-    // window.location.replace(redirectUrl);
-    console.log(coordinates);
+    window.location.replace(redirectUrl);
   }
 
   return pending ? <React.Fragment /> : <Four04 />;
