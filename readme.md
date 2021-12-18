@@ -1,5 +1,6 @@
 # URL Shortener
 
+## Deployed on AWS using S3 (client) and EC2 with CDN and SSL
 
 ## Preview 
 
