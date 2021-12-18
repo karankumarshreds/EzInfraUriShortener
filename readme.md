@@ -18,6 +18,7 @@
 - Authentication ✅
 - Redirection ✅ 
 - Custom Error Handling ✅
+- Unit Tests Coverage ✅
 
 ### Server:
 	- Recursive logic to generate unique url
