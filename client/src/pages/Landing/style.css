@@ -99,3 +99,36 @@ input {
     --gradY: 0%;
   }
 }
+
+@media screen and (max-width: 1130px) {
+  .img__lg {
+    width: 90%;
+  }
+}
+
+@media screen and (min-width: 800px) {
+  .img__sm {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .img__lg {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .img__lg {
+    display: none;
+  }
+  .img__sm {
+    width: 90%;
+  }
+  .box {
+    font-size: 30px !important;
+  }
+  h6 {
+    font-size: 16px !important;
+  }
+}

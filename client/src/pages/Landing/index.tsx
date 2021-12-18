@@ -1,8 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 // @ts-ignore
 import Light from '../../light.svg';
 // @ts-ignore
 import Dark from '../../dark.svg';
+// @ts-ignore
+import LightSM from '../../light-sm.svg';
+// @ts-ignore
+import DarkSM from '../../dark-sm.svg';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import './style.css';
@@ -20,7 +25,8 @@ const LandingPage: React.FC = () => {
       <br />
       <br />
       <br />
-      <img src={`${colorMode.mode === 'light' ? Light : Dark}`} />
+      <img className="img__lg" src={`${colorMode.mode === 'light' ? Light : Dark}`} />
+      <img className="img__sm" src={`${colorMode.mode === 'light' ? LightSM : DarkSM}`} />
       <br />
       <br />
 
@@ -30,12 +36,16 @@ const LandingPage: React.FC = () => {
 
       <br />
       <div>
-        <Button variant="contained" sx={{ px: 4, py: 1.5, borderRadius: 1.5, mr: 3, textTransform: 'none' }}>
-          Signup for free
-        </Button>
-        <Button variant="outlined" sx={{ px: 4, py: 1.5, borderRadius: 1.5, textTransform: 'none' }}>
-          Signin
-        </Button>
+        <Link style={{ textDecoration: 'none' }} to="/signup">
+          <Button variant="contained" sx={{ px: 4, py: 1.5, borderRadius: 1.5, mr: 3, textTransform: 'none' }}>
+            Signup for free
+          </Button>
+        </Link>
+        <Link style={{ textDecoration: 'none' }} to="/signin">
+          <Button variant="outlined" sx={{ px: 4, py: 1.5, borderRadius: 1.5, textTransform: 'none' }}>
+            Signin
+          </Button>
+        </Link>
       </div>
     </div>
   );
