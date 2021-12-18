@@ -10,7 +10,14 @@
 - Server: Node, Express, Typescript, MongoDB 
 - Client: React, Typescript, Material UI
 
-## Features 
+## Features
+
+- Device Info Analytics ✅
+- User Location Analytics ✅
+- Custom URL Naming ✅
+- Authentication ✅
+- Redirection ✅ 
+- Custom Error Handling ✅
 
 ### Server:
 	- Recursive logic to generate unique url
@@ -21,7 +28,8 @@
 
 ### Client 
 	- Custom hooks for api calls 
-	- Light/Dark mode toggler 
+	- Light/Dark mode toggler
+	- Fully responsive pages
 	- Form error validation
 	- React Context for state management
 	- Reusable hooks and components 
