@@ -6,10 +6,12 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Box from '@mui/system/Box';
 import Paper from '@mui/material/Paper';
+import Tooltip from '@mui/material/Tooltip';
 // custom
 import { ColorModeContext } from 'context/theme';
 
 const TableColumns = ['Short URL', 'Mapped URL', 'Total Visits', 'Unique Visits', 'Created At'];
+const NestedColumns = ['Operating System', 'Device Details', 'Location'];
 
 const Analytics: React.FC = () => {
   const colorMode = React.useContext(ColorModeContext);
@@ -28,9 +30,11 @@ const Analytics: React.FC = () => {
               </Typography>
             </Box>
             <Box width={150} sx={{ px: 1, borderRight: '1px solid #efefef' }}>
-              <Typography sx={{ color: 'text.secondary' }} variant="body2">
-                {each.url.slice(0, 9)}...
-              </Typography>
+              <Tooltip title={each.url}>
+                <Typography sx={{ color: 'text.secondary' }} variant="body2">
+                  {each.url.slice(0, 17)}...
+                </Typography>
+              </Tooltip>
             </Box>
             <Box width={150} sx={{ px: 1, borderRight: '1px solid #efefef' }}>
               <Typography sx={{ color: 'text.secondary' }} variant="body2">
@@ -49,7 +53,68 @@ const Analytics: React.FC = () => {
             </Box>
           </AccordionSummary>
           <AccordionDetails>
-            <h1>Visits analytics comes here</h1>
+            <Paper
+              elevation={0}
+              key={`${i}_${new Date()}`}
+              sx={{ pl: 3, py: 3, backgroundColor: `${colorMode.mode === 'light' ? '#fafafa' : '#070a1a'}` }}>
+              <Typography sx={{ pb: 1, color: 'text.secondary', fontWeight: 600 }} variant="h6">
+                Visitors Information
+              </Typography>
+              <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                {NestedColumns.map((th: string) => (
+                  <Box
+                    width={'30%'}
+                    sx={{
+                      px: 1,
+                      py: 1,
+                      border: '1px solid #efefef',
+                    }}
+                    key={th}>
+                    <Typography sx={{ color: 'text.primary' }} variant="body2">
+                      {th}
+                    </Typography>
+                  </Box>
+                ))}
+              </div>
+
+              {each.visits.map((info: any, k: number) => (
+                <div style={{ display: 'flex', width: '100%' }} key={`${k}_${new Date()}`}>
+                  <Box
+                    width={'30%'}
+                    sx={{
+                      px: 1,
+                      py: 1,
+                      border: '1px solid #efefef',
+                    }}>
+                    <Typography sx={{ color: 'text.secondary' }} variant="body2">
+                      {info.analytics.os.name} {` `} {info.analytics.os.version}
+                    </Typography>
+                  </Box>
+                  <Box
+                    width={'30%'}
+                    sx={{
+                      px: 1,
+                      py: 1,
+                      border: '1px solid #efefef',
+                    }}>
+                    <Typography sx={{ color: 'text.secondary' }} variant="body2">
+                      {info.analytics.device.type} {` `} {info.analytics.client.name}
+                    </Typography>
+                  </Box>
+                  <Box
+                    width={'30%'}
+                    sx={{
+                      px: 1,
+                      py: 1,
+                      border: '1px solid #efefef',
+                    }}>
+                    <Typography sx={{ color: 'text.secondary' }} variant="body2">
+                      {info.location}
+                    </Typography>
+                  </Box>
+                </div>
+              ))}
+            </Paper>
           </AccordionDetails>
         </Accordion>
       );
@@ -66,7 +131,7 @@ const Analytics: React.FC = () => {
 
       <Paper sx={{ display: 'flex', px: 2, py: 3, backgroundColor: `${colorMode.mode === 'light' ? '#fff' : '#14192e'}` }}>
         {TableColumns.map((each: string) => (
-          <Box width={each === 'Created At' ? 200 : 150} sx={{ px: 1, borderRight: '1px solid #efefef' }}>
+          <Box width={each === 'Created At' ? 200 : 150} sx={{ px: 1, borderRight: '1px solid #efefef' }} key={each}>
             <Typography sx={{ color: 'text.primary' }} variant="subtitle2">
               {each}
             </Typography>
@@ -74,6 +139,9 @@ const Analytics: React.FC = () => {
         ))}
       </Paper>
       {renderRows()}
+      <br />
+      <br />
+      <br />
     </div>
   );
 };

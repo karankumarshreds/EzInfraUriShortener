@@ -61,7 +61,7 @@ const App: React.FC = () => {
         <Box
           sx={{
             width: '100%',
-            height: '100vh',
+            minHeight: '100vh',
             bgcolor: 'background.default',
             backgroundImage: `url(${mode === 'light' ? bg_light : bg_dark})`,
           }}>

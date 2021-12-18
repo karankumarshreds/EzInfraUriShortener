@@ -24,7 +24,7 @@ export const getDesignTokens = (mode: PaletteMode) => ({
           },
           text: {
             primary: grey[50],
-            secondary: grey[300],
+            secondary: grey[400],
           },
           button: { dark: '#2060FD' },
         }),
