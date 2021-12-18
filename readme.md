@@ -8,7 +8,7 @@
 ## Stack 
 
 - Server: Node, Express, Typescript, MongoDB 
-- Client: React, Typescript, Material UI
+- Client: React, Typescript, Material UI, Figma
 
 ## Features
 
@@ -16,7 +16,6 @@
 - User Location Analytics ✅
 - Custom URL Naming ✅
 - Authentication ✅
-- Redirection ✅ 
 - Custom Error Handling ✅
 - Unit Tests Coverage ✅
 
