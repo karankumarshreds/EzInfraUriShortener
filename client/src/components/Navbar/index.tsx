@@ -50,7 +50,9 @@ const Navbar = () => {
       <MenuItem disabled onClick={handleMenuClose}>
         Profile
       </MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem sx={{ color: 'black' }} onClick={handleMenuClose}>
+        Logout
+      </MenuItem>
     </Menu>
   );
 

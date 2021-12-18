@@ -22,3 +22,9 @@ export type DeviceDetails = {
     model: string;
   };
 };
+
+export interface ILocation {
+  locality?: string;
+  county?: string;
+  country?: string;
+}

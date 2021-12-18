@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/axios": "^0.14.0",
+    "axios": "^0.24.0",
     "cookie-session": "^1.4.0",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",

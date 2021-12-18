@@ -4,11 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from 'context/auth';
+import { LocationContext, LocationContextProvider } from 'context/location';
 
 ReactDOM.render(
   <BrowserRouter>
     <AuthContextProvider>
-      <App />
+      <LocationContextProvider>
+        <App />
+      </LocationContextProvider>
     </AuthContextProvider>
   </BrowserRouter>,
   document.getElementById('root')

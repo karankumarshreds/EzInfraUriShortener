@@ -1,10 +1,11 @@
 import express, { Request, Response } from 'express';
-import { DeviceDetails } from '../interfaces';
+import { DeviceDetails, ILocation } from '../interfaces';
+import axios from 'axios';
 import short from 'short-uuid';
 import { body } from 'express-validator';
 import { BadRequestError, NotAuthorizedError, NotFoundError } from '../common/errors';
 import { currentUser, validateRequest, withAuth } from '../common/middlewares';
-import { SHORT_URL_SUFFIX_LENGTH } from '../configs';
+import { LOCATION_KEY, SHORT_URL_SUFFIX_LENGTH } from '../configs';
 import { Url } from '../models/urls';
 import { Visits } from '../models/visits';
 
@@ -24,7 +25,6 @@ router.get('/generate', currentUser, withAuth, async (req: Request, res: Respons
     if (exists && count < 11) {
       count++;
       recursiveQuery();
-      console.log('Recursive query 👈');
     } else if (count > 10) {
       throw new BadRequestError('Server timeout, try again later');
     } else {
@@ -91,11 +91,15 @@ router.put(
 /**
  * @route /api/url/
  * @method GET
- * @action Returns users urls
+ * @action Returns users urls owned by the user
  */
 
 router.get('/', currentUser, withAuth, async (req: Request, res: Response) => {
   const urls = await Url.find({ user: req.currentUser!.id });
+  // 1. The number of unique visitors
+  // 2. The total number of page views
+  // 3. Device information
+  // 4. Some sort of address
   return res.status(200).send(urls || []);
 });
 
@@ -129,7 +133,7 @@ const deviceDetector = new DeviceDetector();
 
 // increment unique
 router.put('/visits/:id', currentUser, withAuth, async (req: Request, res: Response) => {
-  console.log('👈👈👈👈👈😂😂😂😂');
+  console.log('Location to the unit testing', req.body.location);
   const url = await Url.findById(req.params.id);
   if (!url) throw new NotFoundError();
   // total page count
@@ -142,11 +146,26 @@ router.put('/visits/:id', currentUser, withAuth, async (req: Request, res: Respo
   const useragent = req.headers['user-agent'];
   const device: DeviceDetails = deviceDetector.detect(useragent);
 
-  if (visited) return res.status(200);
+  if (visited) return res.status(200); // return early if the website is already visited
+
+  const { latitude, longitude }: { latitude: string; longitude: string } = req.body.coordinates || {};
+  let info: ILocation | null = null;
+  if (latitude && longitude) {
+    try {
+      const { data } = await axios.get(`http://api.positionstack.com/v1/reverse?access_key=${LOCATION_KEY}&query=${latitude},${longitude}`);
+      if (data && data.data && data.data.length) {
+        info = data.data[0];
+      }
+    } catch (error) {
+      console.log(error, 'Unable to get location at the moment');
+    }
+  }
+
   const visit = Visits.build({
     url: url.id,
     user: req.currentUser!.id,
     analytics: device,
+    location: info ? `${info.locality}, ${info.county}, ${info.country}` : '',
   });
   await visit.save();
   return res.status(201);

@@ -1,6 +1,8 @@
 import React from 'react';
+import { Navigate } from 'react-router-dom';
 import './Signup.css';
 import { ColorModeContext } from 'context/theme';
+import { AuthContext } from 'context/auth';
 import { useRequest } from 'hooks/useRequest';
 // material ui components
 import TextField from '@mui/material/TextField';
@@ -18,6 +20,7 @@ const fields: { field: Field; label: string }[] = [
 
 const Signup: React.FC = () => {
   const colorMode = React.useContext(ColorModeContext);
+  const { authState } = React.useContext(AuthContext);
 
   const [state, setState] = React.useState({
     firstName: '',
@@ -43,6 +46,10 @@ const Signup: React.FC = () => {
   const submit = async () => {
     makeRequest();
   };
+
+  if (authState) {
+    return <Navigate replace to="/" />;
+  }
 
   const renderTextFields = () => {
     return fields.map((each: { field: Field; label: string }) => {

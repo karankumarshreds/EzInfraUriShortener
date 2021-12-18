@@ -55,7 +55,6 @@ const App: React.FC = () => {
   }, []);
 
   if (pending) return <Loading />;
-
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
