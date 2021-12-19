@@ -22,9 +22,7 @@ export const signupMiddleware = async ({ email = 'test@test.com', password = 'pa
   return cookie;
 };
 
-export const signinMiddleware = async (): Promise<string[]> => {
-  const email = 'test@test.com';
-  const password = 'password';
+export const signinMiddleware = async ({ email = 'test@test.com', password = 'password' }: Params): Promise<string[]> => {
   const response = await request(app)
     .post('/api/auth/signup')
     .send({
@@ -34,7 +32,6 @@ export const signinMiddleware = async (): Promise<string[]> => {
       lastName: 'test',
     })
     .expect(201);
-  console.log('RESPNSESE SER ESR E', response.error);
   const cookie = response.get('Set-Cookie');
   return cookie;
 };

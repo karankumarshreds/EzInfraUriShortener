@@ -122,7 +122,7 @@ describe('SIGNUP USER ROUTE', () => {
 
 describe('SIGNOUT USER ROUTE', () => {
   it('clears the cookie after signout', async () => {
-    const cookie = await signinMiddleware();
+    const cookie = await signinMiddleware({});
     await request(app).post('/api/auth/signout').set('Cookie', cookie).send({}).expect(200);
     const response = await request(app).get('/api/auth/current-user').send({});
     expect(response.body).toEqual({});
