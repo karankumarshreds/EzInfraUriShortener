@@ -1,4 +1,7 @@
 import React from 'react';
+import { AnalyticsResponse } from 'interfaces';
+import useRequest from 'hooks/useRequest';
+// material ui components
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -9,15 +12,36 @@ import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
 // custom
 import { ColorModeContext } from 'context/theme';
+import Loading from 'pages/Loading';
 
 const TableColumns = ['Short URL', 'Mapped URL', 'Total Visits', 'Unique Visits', 'Created At'];
 const NestedColumns = ['Operating System', 'Device Details', 'Location'];
 
 const Analytics: React.FC = () => {
   const colorMode = React.useContext(ColorModeContext);
+  const [error, setError] = React.useState(false);
+  const [response, setResponse] = React.useState<AnalyticsResponse | null>(null);
+
+  const { pending, makeRequest } = useRequest<AnalyticsResponse>({
+    url: `/api/url`,
+    method: 'get',
+    payload: {},
+    onSuccess: (data) => {
+      setResponse(data);
+    },
+    onError: () => {
+      setError(true);
+    },
+  });
+
+  React.useEffect(() => {
+    makeRequest();
+  }, []);
+
+  if (pending || !response) return <Loading />;
 
   const renderRows = () => {
-    return dummyData.map((each: any, i: number) => {
+    return response.map((each, i: number) => {
       return (
         <Accordion key={i} sx={{ backgroundColor: `${colorMode.mode === 'light' ? '#fff' : '#14192e'}` }}>
           <AccordionSummary
@@ -147,117 +171,3 @@ const Analytics: React.FC = () => {
 };
 
 export default Analytics;
-
-var dummyData = [
-  {
-    shortUrl: 'metal',
-    url: 'https://www.youtube.com/watch?v=WJF5Z1WRcqw&ab_channel=Rauf%26Faik',
-    views: 3,
-    createdAt: '2021-12-18T16:23:35.375Z',
-    id: '61be0e71bda55bc2b4240620',
-    visits: [
-      {
-        _id: '61be0e88bda55bc2b4240628',
-        url: '61be0e71bda55bc2b4240620',
-        user: '61bb37ade24cddfe1a530c00',
-        analytics: {
-          os: {
-            name: 'Windows',
-            short_name: 'WIN',
-            version: '10',
-            platform: 'x64',
-            family: 'Windows',
-          },
-          client: {
-            type: 'browser',
-            name: 'Chrome',
-            short_name: 'CH',
-            version: '92.0.4515.107',
-            engine: 'Blink',
-            engine_version: '',
-            family: 'Chrome',
-          },
-          device: {
-            id: '',
-            type: 'desktop',
-            brand: '',
-            model: '',
-          },
-        },
-        location: 'Delhi, South West, India',
-        __v: 0,
-      },
-    ],
-  },
-  {
-    shortUrl: 'testing',
-    url: 'https://www.google.com/search?q=json+to+interface+typescript&rlz=1C1CHBF_enIN925IN925&oq=json+to+interface+ty&aqs=chrome.0.0i512j69i57j0i22i30l8.7772j0j4&sourceid=chrome&ie=UTF-8',
-    views: 3,
-    createdAt: '2021-12-18T18:37:24.077Z',
-    id: '61be2e4d5ca11224237c10b1',
-    visits: [
-      {
-        _id: '61be2e7f5ca11224237c10c0',
-        url: '61be2e4d5ca11224237c10b1',
-        user: '61be2e5e5ca11224237c10b4',
-        analytics: {
-          os: {
-            name: 'Windows',
-            short_name: 'WIN',
-            version: '10',
-            platform: 'x64',
-            family: 'Windows',
-          },
-          client: {
-            type: 'browser',
-            name: 'Chrome',
-            short_name: 'CH',
-            version: '92.0.4515.107',
-            engine: 'Blink',
-            engine_version: '',
-            family: 'Chrome',
-          },
-          device: {
-            id: '',
-            type: 'desktop',
-            brand: '',
-            model: '',
-          },
-        },
-        location: 'Delhi, South West, India',
-        __v: 0,
-      },
-      {
-        _id: '61be2eec867459600b643333',
-        url: '61be2e4d5ca11224237c10b1',
-        user: '61be2ec9867459600b643326',
-        analytics: {
-          os: {
-            name: 'Windows',
-            short_name: 'WIN',
-            version: '10',
-            platform: 'x64',
-            family: 'Windows',
-          },
-          client: {
-            type: 'browser',
-            name: 'Chrome',
-            short_name: 'CH',
-            version: '92.0.4515.107',
-            engine: 'Blink',
-            engine_version: '',
-            family: 'Chrome',
-          },
-          device: {
-            id: '',
-            type: 'desktop',
-            brand: '',
-            model: '',
-          },
-        },
-        location: 'Delhi, South West, India',
-        __v: 0,
-      },
-    ],
-  },
-];

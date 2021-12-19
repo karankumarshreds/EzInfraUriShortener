@@ -69,6 +69,7 @@ const App: React.FC = () => {
           <Container>
             <Routes>
               <Route path="/analytics" element={<Analytics />} />
+              <Route path="/analytics:id" element={<Analytics />} />
               <Route path="/signin" element={<Signin />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/:shortUrl" element={<Redirect />} />

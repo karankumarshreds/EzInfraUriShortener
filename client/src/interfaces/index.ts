@@ -31,13 +31,23 @@ export interface DeviceDetails {
     family: string;
   };
   device: {
-    id: string;
+    id?: string;
     type: string;
-    brand: string;
-    model: string;
+    brand?: string;
+    model?: string;
   };
 }
 
-export interface details {
-  devices: DeviceDetails[];
+interface Analytics {
+  shortUrl: string;
+  url: string;
+  views: number;
+  createdAt: string;
+  id: string;
+  visits: {
+    location: string;
+    analytics: DeviceDetails;
+  }[];
 }
+
+export type AnalyticsResponse = Analytics[];
