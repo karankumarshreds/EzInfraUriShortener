@@ -157,9 +157,13 @@ const deviceDetector = new DeviceDetector();
 //   res.status(200).send({ ...device });
 // });
 
+/**
+ * / test ==> amazn user1
+ * / test ==> googl user2
+ */
+
 // increment unique
 router.put('/visits/:id', currentUser, withAuth, async (req: Request, res: Response) => {
-  console.log('Location to the unit testing', req.body.location);
   const url = await Url.findById(req.params.id);
   if (!url) throw new NotFoundError();
   // total page count
