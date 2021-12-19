@@ -1,6 +1,13 @@
 import request from 'supertest';
 import { app } from '../../app';
-import { signupMiddleware } from '../../test/tests-middleware';
+import { signinMiddleware, signupMiddleware } from '../../test/tests-middleware';
+
+const dummyData = {
+  email: 'test@test.com',
+  password: 'password',
+  firstName: 'test',
+  lastName: 'test',
+};
 
 describe('CURRENT USER ROUTE', () => {
   it('returns current user details', async () => {
@@ -48,5 +55,76 @@ describe('SIGNIN USER ROUTE', () => {
       })
       .expect(201);
     expect(response.get('Set-Cookie')).toBeDefined();
+  });
+});
+
+describe('SIGNUP USER ROUTE', () => {
+  it('returns a 201 on successful signup', async () => {
+    return request(app)
+      .post('/api/auth/signup')
+      .send({
+        ...dummyData,
+      })
+      .expect(201);
+  });
+
+  it('returns a 400 with an invalid email', async () => {
+    return request(app)
+      .post('/api/auth/signup')
+      .send({
+        email: 'testtest.com',
+        password: 'password',
+      })
+      .expect(400);
+  });
+
+  it('returns a 400 with an invalid password', async () => {
+    return request(app)
+      .post('/api/auth/signup')
+      .send({
+        email: 'test@test.com',
+        password: 'p',
+      })
+      .expect(400);
+  });
+
+  it('returns a 400 with missing email and password', async () => {
+    return request(app).post('/api/auth/signup').send({}).expect(400);
+  });
+
+  it('disallows duplicate emails', async () => {
+    await request(app)
+      .post('/api/auth/signup')
+      .send({
+        ...dummyData,
+      })
+      .expect(201);
+    await request(app)
+      .post('/api/auth/signup')
+      .send({
+        ...dummyData,
+      })
+      .expect(400);
+  });
+
+  it('sets a cookie after a successful signup', async () => {
+    const response = await request(app)
+      .post('/api/auth/signup')
+      .send({
+        ...dummyData,
+      })
+      .expect(201);
+    // To check if user is getting a cookie attached to header
+    // as 'Set-Cookie' which includes the JWT for the user
+    expect(response.get('Set-Cookie')).toBeDefined();
+  });
+});
+
+describe('SIGNOUT USER ROUTE', () => {
+  it('clears the cookie after signout', async () => {
+    const cookie = await signinMiddleware();
+    await request(app).post('/api/auth/signout').set('Cookie', cookie).send({}).expect(200);
+    const response = await request(app).get('/api/auth/current-user').send({});
+    expect(response.body).toEqual({});
   });
 });

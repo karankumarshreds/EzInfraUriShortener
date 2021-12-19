@@ -26,27 +26,3 @@ afterAll(async () => {
   await mongo.stop();
   connection.close();
 });
-
-// refactoring global to accept custom function to be used by all the tests
-declare global {
-  namespace NodeJS {
-    interface Global {
-      signin(): Promise<string[]>;
-    }
-  }
-}
-
-// @ts-ignore
-global.signin = async () => {
-  const email = 'test@test.com';
-  const password = 'password';
-  const response = await request(app)
-    .post('/api/users/signup')
-    .send({
-      email,
-      password,
-    })
-    .expect(201);
-  const cookie = response.get('Set-Cookie');
-  return cookie;
-};
