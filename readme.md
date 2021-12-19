@@ -1,7 +1,5 @@
 # URL Shortener
 
-## Deployed on AWS using S3 (client) and EC2 with CDN and SSL
-
 ## Preview 
 
 <img src="https://github.com/karankumarshreds/dyte/blob/master/static/landing.gif" width="1000"/>
@@ -18,7 +16,7 @@
 - Custom URL Naming ✅
 - Authentication ✅
 - Custom Error Handling ✅
-- Unit Tests Coverage ✅
+- Unit Tests Coverage (12+) ✅
 
 ### Server:
 	- Recursive logic to generate unique url

@@ -1,5 +1,11 @@
 import React from 'react';
+import './style.css';
 import { Link } from 'react-router-dom';
+import { ColorModeContext } from 'context/theme';
+
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+
 // @ts-ignore
 import Light from '../../light.svg';
 // @ts-ignore
@@ -8,10 +14,6 @@ import Dark from '../../dark.svg';
 import LightSM from '../../light-sm.svg';
 // @ts-ignore
 import DarkSM from '../../dark-sm.svg';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import './style.css';
-import { ColorModeContext } from 'context/theme';
 
 const LandingPage: React.FC = () => {
   const colorMode = React.useContext(ColorModeContext);
