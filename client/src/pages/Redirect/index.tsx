@@ -12,6 +12,7 @@ const Redirect: React.FC = () => {
   const params = useParams<{ shortUrl: string }>();
   const [redirectUrl, setRedirectUrl] = React.useState('');
   const [id, setId] = React.useState<string | null>(null);
+  const [four04, setfour04] = React.useState(false);
   const coordinates = React.useContext(LocationContext);
 
   const { pending, makeRequest } = useRequest<UrlDetails>({
@@ -22,7 +23,10 @@ const Redirect: React.FC = () => {
       setRedirectUrl(data.url);
       setId(data.id);
     },
-    onError: () => {},
+    onError: (error) => {
+      // @ts-ignore
+      if (error.response.status) setfour04(true);
+    },
   });
 
   React.useEffect(() => {
@@ -43,13 +47,11 @@ const Redirect: React.FC = () => {
     }
   }, [redirectUrl, id]);
 
-  if (pending) return <Loading text="redirecting" />;
-
   if (!pending && redirectUrl) {
     window.location.replace(redirectUrl);
   }
 
-  return pending ? <React.Fragment /> : <Four04 />;
+  return four04 ? <Four04 /> : <Loading text="redirecting" />;
 };
 
 export default Redirect;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { api } from 'api';
+import { AxiosError } from 'axios';
 
 // interface Params
 
@@ -8,7 +9,7 @@ export const useRequest = <T>(params: {
   method: 'get' | 'put' | 'post' | 'delete' | 'patch';
   payload: any;
   onSuccess: (data: T) => void;
-  onError: () => void;
+  onError: (error: AxiosError) => void;
 }): { errors: string[] | null; errorsMap: { [field: string]: string }; makeRequest: () => void; pending: boolean } => {
   const [pending, setPending] = React.useState<boolean>(false);
   const [errors, setErrors] = React.useState<string[] | null>(null);
@@ -22,7 +23,7 @@ export const useRequest = <T>(params: {
       const response = (await api[params.method](params.url, { ...params.payload })) as { data: T };
       setPending(false);
       params.onSuccess(response.data);
-    } catch (error: any) {
+    } catch (error: AxiosError | any) {
       setPending(false);
       const errorsArray: { message: string; field?: string }[] = error?.response?.data?.errors;
       if (errorsArray && errorsArray.length) {
@@ -38,7 +39,7 @@ export const useRequest = <T>(params: {
         });
         setErrorsMap(map);
         setErrors(err);
-        params.onError();
+        params.onError(error);
       } else setErrors(['Something went wrong']);
     }
   };
