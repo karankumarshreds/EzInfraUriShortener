@@ -153,6 +153,19 @@ describe('REDIRECTION MAPPING', () => {
     expect(response.body.shortUrl).toEqual('testing');
     expect(response.body.url).toEqual('https://youtube.com');
   });
+
+  it('returns 404 if the url is not found', async () => {
+    const user1 = await signinMiddleware({});
+    await request(app)
+      .post('/api/url')
+      .set('Cookie', user1)
+      .send({
+        url: 'https://youtube.com',
+        shortUrl: 'testing',
+      })
+      .expect(201);
+    await request(app).get(`/api/url/testing_gibberish`).set('Cookie', user1).expect(404);
+  });
 });
 
 describe('DELETE URL', () => {
@@ -167,6 +180,20 @@ describe('DELETE URL', () => {
       })
       .expect(201);
     await request(app).delete(`/api/url/${response.body.id}`).set('Cookie', user1).expect(200);
-    const res = await request(app).get(`/api/url/${response.body.id}`).set('Cookie', user1).expect(404);
+    await request(app).get(`/api/url/${response.body.id}`).set('Cookie', user1).expect(404);
+  });
+  it('returns 401 for user not owning url', async () => {
+    const user1 = await signinMiddleware({});
+    const response = await request(app)
+      .post('/api/url')
+      .set('Cookie', user1)
+      .send({
+        url: 'https://youtube.com',
+        shortUrl: 'testing',
+      })
+      .expect(201);
+    const user2 = await signinMiddleware({ email: 'test2@test.com', password: 'password' });
+    await request(app).delete(`/api/url/${response.body.id}`).set('Cookie', user2).expect(401);
+    await request(app).get(`/api/url/testing`).set('Cookie', user1).expect(200);
   });
 });

@@ -84,6 +84,10 @@ router.put(
   async (req: Request, res: Response) => {
     const id = req.params.id;
     const url = await Url.findById(id);
+    const exists = await Url.findOne({ shortUrl: req.body.shortUrl });
+    if (exists) {
+      throw new BadRequestError('Short URL already taken', 'shortUrl');
+    }
     if (!url) throw new NotFoundError();
     if (url.user.toString() !== req.currentUser!.id) throw new NotAuthorizedError();
     url.shortUrl = req.body.shortUrl;
@@ -101,8 +105,10 @@ router.delete('/:id', currentUser, withAuth, async (req: Request, res: Response)
   const url = await Url.findById(req.params.id);
   if (!url) throw new NotFoundError();
   if (url.user.toString() !== req.currentUser!.id) throw new NotAuthorizedError();
-  await Url.findByIdAndRemove(req.params.id);
-  return res.status(200).send();
+  else {
+    await Url.findByIdAndRemove(req.params.id);
+    return res.status(200).send();
+  }
 });
 
 /**
@@ -126,19 +132,6 @@ router.get('/', currentUser, withAuth, async (req: Request, res: Response) => {
     },
   ]);
 
-  /**
-   *
-   * url  | short | total visits | unique views
-   *
-   * graph
-   *
-   */
-
-  // const urls = await Url.find({ user: req.currentUser!.id }).sort({ createdAt: -1 });
-  // // 1. The number of unique visitors
-  // // 2. The total number of page views
-  // // 3. Device information
-  // // 4. Some sort of address
   return res.status(200).send(data || []);
 });
 

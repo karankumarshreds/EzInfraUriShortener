@@ -16,7 +16,7 @@
 - Custom URL Naming ✅
 - Authentication ✅
 - Custom Error Handling ✅
-- Unit Tests Coverage (12+) ✅
+- Unit Tests Coverage (24+) ✅
 
 ### Server:
 	- Recursive logic to generate unique url
