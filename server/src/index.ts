@@ -5,12 +5,19 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
-const CONN_STRING = process.env.CONN_STRING || 'mongodb://localhost:27017/dyte';
+const CONN_STRING = process.env.CONN_STRING;
+const JWT_KEY = process.env.JWT_KEY;
 
 const start = async () => {
-  // authentication
-  if (!process.env.JWT_KEY) {
+  /* env variables check */
+  if (!JWT_KEY) {
     throw new Error('JWT_KEY must be provided');
+  }
+  if (!CONN_STRING) {
+    throw new Error('CONN_STRING must be provided');
+  }
+  if (!process.env.CLIENT_ADDRESS) {
+    throw new Error('CLIENT_ADDRESS must be provided');
   }
 
   try {

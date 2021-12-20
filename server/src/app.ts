@@ -4,6 +4,8 @@ import { json } from 'body-parser';
 import cors from 'cors';
 import { errorHandler } from './common/errors';
 import cookieSession from 'cookie-session';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 // routes
 import { authenticationRoutes } from './routes/authentication';
@@ -16,7 +18,7 @@ app.set('trust proxy', true);
 app.use(json());
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: [process.env.CLIENT_ADDRESS!],
     methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
     credentials: true,
   })
