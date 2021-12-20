@@ -93,6 +93,19 @@ router.put(
 );
 
 /**
+ * @route /api/url/:id
+ * @method DELTE
+ * @action Updates the route
+ */
+router.delete('/:id', currentUser, withAuth, async (req: Request, res: Response) => {
+  const url = await Url.findById(req.params.id);
+  if (!url) throw new NotFoundError();
+  if (url.user.toString() !== req.currentUser!.id) throw new NotAuthorizedError();
+  await Url.findByIdAndRemove(req.params.id);
+  return res.status(200).send();
+});
+
+/**
  * @route /api/url/
  * @method GET
  * @action Returns users urls owned by the user

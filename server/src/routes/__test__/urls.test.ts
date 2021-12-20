@@ -154,3 +154,19 @@ describe('REDIRECTION MAPPING', () => {
     expect(response.body.url).toEqual('https://youtube.com');
   });
 });
+
+describe('DELETE URL', () => {
+  it('deletes url successfully', async () => {
+    const user1 = await signinMiddleware({});
+    const response = await request(app)
+      .post('/api/url')
+      .set('Cookie', user1)
+      .send({
+        url: 'https://youtube.com',
+        shortUrl: 'testing',
+      })
+      .expect(201);
+    await request(app).delete(`/api/url/${response.body.id}`).set('Cookie', user1).expect(200);
+    const res = await request(app).get(`/api/url/${response.body.id}`).set('Cookie', user1).expect(404);
+  });
+});

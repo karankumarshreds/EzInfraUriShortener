@@ -4,6 +4,7 @@ import './Signup.css';
 import { ColorModeContext } from 'context/theme';
 import { AuthContext } from 'context/auth';
 import { useRequest } from 'hooks/useRequest';
+import { UserPayload } from 'interfaces';
 // material ui components
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
@@ -20,7 +21,7 @@ const fields: { field: Field; label: string }[] = [
 
 const Signup: React.FC = () => {
   const colorMode = React.useContext(ColorModeContext);
-  const { authState } = React.useContext(AuthContext);
+  const { authState, setAuthState } = React.useContext(AuthContext);
 
   const [state, setState] = React.useState({
     firstName: '',
@@ -29,12 +30,12 @@ const Signup: React.FC = () => {
     password: '',
   });
 
-  const { errors, errorsMap, pending, makeRequest } = useRequest<{ firstName: string; lastName: string; id: string }>({
+  const { errors, errorsMap, pending, makeRequest } = useRequest<UserPayload>({
     url: 'http://localhost:5000/api/auth/signup',
     method: 'post',
     payload: { ...state },
     onSuccess: (data) => {
-      console.log(data);
+      setAuthState(data);
     },
     onError: () => {},
   });

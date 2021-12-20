@@ -10,17 +10,25 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Box from '@mui/system/Box';
 import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 // custom
 import { ColorModeContext } from 'context/theme';
 import Loading from 'pages/Loading';
+import EditModal from 'components/Modals/EditModal';
+import DeleteModal from 'components/Modals/GenericModal';
+import { api } from 'api';
 
 const TableColumns = ['Short URL', 'Mapped URL', 'Total Visits', 'Unique Visits', 'Created At'];
 const NestedColumns = ['Operating System', 'Device Details', 'Location'];
 
 const Analytics: React.FC = () => {
   const colorMode = React.useContext(ColorModeContext);
-  const [error, setError] = React.useState(false);
   const [response, setResponse] = React.useState<AnalyticsResponse | null>(null);
+  const [deleteError, setDeleteError] = React.useState<boolean>(false);
+  const [showEditModal, setShowEditModal] = React.useState<boolean>(false);
+  const [showDeleteModal, setShowDeleteModal] = React.useState<boolean>(false);
+  const [urlId, setUrlId] = React.useState<string>('');
 
   const { pending, makeRequest } = useRequest<AnalyticsResponse>({
     url: `/api/url`,
@@ -29,9 +37,7 @@ const Analytics: React.FC = () => {
     onSuccess: (data) => {
       setResponse(data);
     },
-    onError: () => {
-      setError(true);
-    },
+    onError: () => {},
   });
 
   React.useEffect(() => {
@@ -41,6 +47,7 @@ const Analytics: React.FC = () => {
   if (pending || !response) return <Loading />;
 
   const renderRows = () => {
+    if (!response || !response.length) return <React.Fragment />;
     return response.map((each, i: number) => {
       return (
         <Accordion key={i} sx={{ backgroundColor: `${colorMode.mode === 'light' ? '#fff' : '#14192e'}` }}>
@@ -139,6 +146,32 @@ const Analytics: React.FC = () => {
                 </div>
               ))}
             </Paper>
+            <div
+              style={{
+                paddingTop: 10,
+                display: 'flex',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+                cursor: 'pointer',
+                color: '#303030',
+              }}>
+              <Button
+                onClick={() => {
+                  setUrlId(each.id);
+                  setShowEditModal(true);
+                }}
+                variant="outlined"
+                sx={{ py: 0.5, textTransform: 'none' }}>
+                Edit
+              </Button>
+              <DeleteOutlineIcon
+                onClick={() => {
+                  setUrlId(each.id);
+                  setShowDeleteModal(true);
+                }}
+                sx={{ ml: 1, color: 'text.secondary' }}
+              />
+            </div>
           </AccordionDetails>
         </Accordion>
       );
@@ -147,6 +180,39 @@ const Analytics: React.FC = () => {
 
   return (
     <div style={{ paddingTop: 100 }}>
+      {showDeleteModal && (
+        <DeleteModal
+          show={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+          title="Delete URL Mapping"
+          description="Are you sure you want to delete the mapped url?"
+          onSuccess={async () => {
+            try {
+              await api.delete(`/api/url/${urlId}`);
+              setResponse((oldArray) => [...(oldArray || []).filter((each) => each.id !== urlId)]);
+            } catch (error) {
+              console.error('Unable to delete');
+              setDeleteError(true);
+            }
+          }}
+          successButtonText="Delete"
+        />
+      )}
+      {showEditModal && (
+        <EditModal
+          show={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          urlId={urlId}
+          onSuccess={(updatedUrl) => {
+            setResponse((oldArray) => [
+              ...(oldArray || []).map((each) => {
+                if (each.id === urlId) return { ...each, shortUrl: updatedUrl };
+                else return each;
+              }),
+            ]);
+          }}
+        />
+      )}
       <Typography variant="h4" fontWeight={600} sx={{ color: 'text.primary' }}>
         Detailed Analytics
       </Typography>
