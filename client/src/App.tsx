@@ -25,7 +25,7 @@ import ProtectedRoute from 'hoc/ProtectedRoute';
 
 const App: React.FC = () => {
   // main
-  const [mode, setMode] = React.useState<PaletteMode>('light');
+  const [mode, setMode] = React.useState<PaletteMode>('dark');
   const colorMode = React.useMemo(
     () => ({
       toggleColorMode: () => {
@@ -65,7 +65,8 @@ const App: React.FC = () => {
             minHeight: '100vh',
             bgcolor: 'background.default',
             backgroundImage: `url(${mode === 'light' ? bg_light : bg_dark})`,
-          }}>
+          }}
+          className="bg__main">
           <Navbar />
           <Container>
             <Routes>

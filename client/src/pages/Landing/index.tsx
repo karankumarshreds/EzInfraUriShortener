@@ -31,23 +31,26 @@ const LandingPage: React.FC = () => {
       <img className="img__sm" src={`${colorMode.mode === 'light' ? LightSM : DarkSM}`} />
       <br />
       <br />
+      <div className="bottom__half">
+        <Typography variant="h6" sx={{ textAlign: 'center', color: 'text.primary' }} fontWeight={600}>
+          Get Started For Free
+        </Typography>
 
-      <Typography variant="h6" sx={{ color: 'text.primary' }} fontWeight={600}>
-        Get Started For Free
-      </Typography>
-
-      <br />
-      <div>
-        <Link style={{ textDecoration: 'none' }} to="/signup">
-          <Button variant="contained" sx={{ px: 4, py: 1.5, borderRadius: 1.5, mr: 3, textTransform: 'none', backgroundColor: '#0066ff' }}>
-            Signup for free
-          </Button>
-        </Link>
-        <Link style={{ textDecoration: 'none' }} to="/signin">
-          <Button variant="outlined" sx={{ px: 4, py: 1.5, borderRadius: 1.5, textTransform: 'none' }}>
-            Signin
-          </Button>
-        </Link>
+        <br />
+        <div>
+          <Link style={{ textDecoration: 'none' }} to="/signup">
+            <Button
+              variant="contained"
+              sx={{ px: 4, py: 1.5, borderRadius: 1.5, mr: 3, textTransform: 'none', backgroundColor: '#0066ff' }}>
+              Signup for free
+            </Button>
+          </Link>
+          <Link style={{ textDecoration: 'none' }} to="/signin">
+            <Button variant="outlined" sx={{ px: 4, py: 1.5, borderRadius: 1.5, textTransform: 'none' }}>
+              Signin
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   );

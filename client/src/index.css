@@ -21,3 +21,8 @@ code {
 .Mui-disabled {
   color: rgb(136, 136, 136) !important;
 }
+
+.bg__main {
+  backface-visibility: hidden;
+  background-size: 35rem;
+}

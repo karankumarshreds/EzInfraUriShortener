@@ -51,7 +51,7 @@ input {
   --gradX: 100%;
   --gradY: 50%;
   --c1: #0066ff57;
-  --c2: #0066ff13;
+  --c2: #0066ff00;
 }
 
 .wrapper {
@@ -130,5 +130,26 @@ input {
   }
   h6 {
     font-size: 16px !important;
+  }
+}
+
+.img__lg,
+.img__sm {
+  animation: fade-in 2s ease-in;
+}
+
+.bottom__half {
+  animation: fade-in 1.5s ease-in;
+  animation-delay: 2s;
+  animation-fill-mode: both;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0%;
+  }
+
+  100% {
+    opacity: 100%;
   }
 }
