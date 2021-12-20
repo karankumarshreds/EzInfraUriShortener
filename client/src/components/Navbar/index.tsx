@@ -87,7 +87,7 @@ const Navbar = () => {
               component="div"
               fontWeight={600}
               sx={{ mr: 2, display: { md: 'flex' }, color: 'text.primary', py: 3 }}>
-              Dyte.io
+              eazy<span style={{ color: '#0066ff' }}>infra</span>
             </Typography>
           </Link>
           <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end' }}>

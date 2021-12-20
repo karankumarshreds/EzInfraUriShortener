@@ -87,7 +87,7 @@ const Signup: React.FC = (props) => {
         }}>
         <div className="wrapper">
           <Typography className="box" sx={{ color: 'text.primary', mb: 1, fontWeight: 600, textAlign: 'center' }} variant="h4">
-            Dyte.io
+            eazy<span style={{ color: '#0066ff' }}>infra</span>
           </Typography>
         </div>
         {errors && errors.length > 0 && (
@@ -97,7 +97,7 @@ const Signup: React.FC = (props) => {
         )}
         {renderTextFields()}
 
-        <Button sx={{ width: '100%' }} variant="contained" onClick={submit} disabled={pending}>
+        <Button sx={{ width: '100%', backgroundColor: '#0066ff' }} variant="contained" onClick={submit} disabled={pending}>
           {pending ? <CircularProgress sx={{ width: 5 }} /> : 'Signin'}
         </Button>
 
@@ -110,7 +110,7 @@ const Signup: React.FC = (props) => {
             justifyContent: 'center',
           }}>
           Do not have an account?{' '}
-          <Link to="/signup">
+          <Link to="/signup" style={{ textDecoration: 'none' }}>
             <span
               style={{
                 color: '#2060FD',

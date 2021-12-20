@@ -20,8 +20,8 @@ const LandingPage: React.FC = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 100, userSelect: 'none' }}>
       <div className="wrapper" style={{ textAlign: 'center' }}>
-        <Typography className="box" sx={{ color: 'text.primary' }} variant="h3" fontWeight={600}>
-          Dyte.io URL Shortener
+        <Typography className="box" sx={{ color: 'text.primary', letterSpacing: 0.2 }} variant="h3" fontWeight={800}>
+          eazy<span style={{ color: '#0066ff' }}>infra</span> url shortener
         </Typography>
       </div>
       <br />
@@ -39,7 +39,7 @@ const LandingPage: React.FC = () => {
       <br />
       <div>
         <Link style={{ textDecoration: 'none' }} to="/signup">
-          <Button variant="contained" sx={{ px: 4, py: 1.5, borderRadius: 1.5, mr: 3, textTransform: 'none' }}>
+          <Button variant="contained" sx={{ px: 4, py: 1.5, borderRadius: 1.5, mr: 3, textTransform: 'none', backgroundColor: '#0066ff' }}>
             Signup for free
           </Button>
         </Link>

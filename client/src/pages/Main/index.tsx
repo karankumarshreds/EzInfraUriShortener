@@ -65,7 +65,7 @@ const Main: React.FC = () => {
             mx: 'auto',
           }}>
           <Typography sx={{ color: 'text.primary', fontWeight: 600 }} variant="h4">
-            Dyte.io Url Shortener
+            EazyInfra Url Shortener
           </Typography>
           {errors && errors.length > 0 && (
             <Typography textAlign={'center'} variant="subtitle2" color="red">
