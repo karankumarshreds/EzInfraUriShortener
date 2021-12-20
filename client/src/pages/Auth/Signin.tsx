@@ -29,7 +29,7 @@ const Signup: React.FC = (props) => {
   });
 
   const { errors, errorsMap, pending, makeRequest } = useRequest<UserPayload>({
-    url: 'http://localhost:5000/api/auth/signin',
+    url: '/api/auth/signin',
     method: 'post',
     payload: { ...state },
     onSuccess: (data: UserPayload) => {
