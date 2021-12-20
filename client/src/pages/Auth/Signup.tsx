@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import './Signup.css';
 import { ColorModeContext } from 'context/theme';
 import { AuthContext } from 'context/auth';
@@ -110,16 +110,18 @@ const Signup: React.FC = () => {
             justifyContent: 'center',
           }}>
           Already have an account?{' '}
-          <span
-            style={{
-              color: '#2060FD',
-              fontSize: '16px',
-              fontWeight: 500,
-              cursor: 'pointer',
-              marginLeft: 3,
-            }}>
-            Signin
-          </span>
+          <Link to="/signin" style={{ textDecoration: 'none' }}>
+            <span
+              style={{
+                color: '#2060FD',
+                fontSize: '16px',
+                fontWeight: 500,
+                cursor: 'pointer',
+                marginLeft: 3,
+              }}>
+              Signin
+            </span>
+          </Link>
         </Typography>
       </Box>
     </React.Fragment>
