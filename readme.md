@@ -8,6 +8,8 @@
 
 ### AWS Code Pipiline with github HOOKS for CICD ✅
 
+### Database deployed on mongo ATLAS ✅
+
 ### Deployed <a href="https://www.eazyinfra.com/">here</a>
 
 ## Stack
