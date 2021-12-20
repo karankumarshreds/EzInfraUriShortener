@@ -21,6 +21,7 @@ import Loading from 'pages/Loading';
 import Analytics from 'pages/Analytics';
 import Main from 'pages/Main';
 import Redirect from 'pages/Redirect';
+import ProtectedRoute from 'hoc/ProtectedRoute';
 
 const App: React.FC = () => {
   // main
@@ -68,11 +69,24 @@ const App: React.FC = () => {
           <Navbar />
           <Container>
             <Routes>
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/analytics:id" element={<Analytics />} />
+              <Route
+                path="/analytics"
+                element={
+                  <ProtectedRoute>
+                    <Analytics />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/signin" element={<Signin />} />
               <Route path="/signup" element={<Signup />} />
-              <Route path="/:shortUrl" element={<Redirect />} />
+              <Route
+                path="/:shortUrl"
+                element={
+                  <ProtectedRoute>
+                    <Redirect />
+                  </ProtectedRoute>
+                }
+              />
               <Route path="/" element={authState ? <Main /> : <LandingPage />} />
             </Routes>
           </Container>
