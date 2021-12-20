@@ -1,8 +1,7 @@
 import axios from 'axios';
 
 export const api = axios.create({
-  // baseURL: process.env.REACT_APP_BACKEND_URI,
-  baseURL: 'http://3.108.11.72:5000',
+  baseURL: 'https://api.eazyinfra.com',
   headers: {
     'Content-Type': 'application/json',
   },
