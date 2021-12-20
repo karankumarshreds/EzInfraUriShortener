@@ -4,7 +4,7 @@ import { DeviceDetails } from '../interfaces';
 interface Attrs {
   url: string;
   user: string;
-  analytics: DeviceDetails;
+  analytics: DeviceDetails | {};
   location?: string;
 }
 
@@ -18,7 +18,7 @@ const schema = new mongoose.Schema(
   {
     url: { type: mongoose.SchemaTypes.ObjectId, ref: 'Url', required: true },
     user: { type: mongoose.SchemaTypes.ObjectId, ref: 'User', required: true },
-    analytics: { type: Object, required: true },
+    analytics: { type: Object, required: true, default: {} },
     location: { type: String, required: false, default: '' },
   },
   {

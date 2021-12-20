@@ -118,20 +118,24 @@ router.delete('/:id', currentUser, withAuth, async (req: Request, res: Response)
  */
 
 router.get('/', currentUser, withAuth, async (req: Request, res: Response) => {
-  const data = await Url.aggregate([
-    // @ts-ignore
-    { $match: { user: mongoose.Types.ObjectId(req.currentUser!.id) } },
-    { $project: { _id: 0, id: '$_id', views: 1, createdAt: 1, url: 1, shortUrl: 1 } },
-    {
-      $lookup: {
-        from: 'visits',
-        localField: 'id',
-        foreignField: 'url',
-        as: 'visits',
+  let data;
+  try {
+    data = await Url.aggregate([
+      // @ts-ignore
+      { $match: { user: mongoose.Types.ObjectId(req.currentUser!.id) } },
+      { $project: { _id: 0, id: '$_id', views: 1, createdAt: 1, url: 1, shortUrl: 1 } },
+      {
+        $lookup: {
+          from: 'visits',
+          localField: 'id',
+          foreignField: 'url',
+          as: 'visits',
+        },
       },
-    },
-  ]);
-
+    ]);
+  } catch (error) {
+    console.log(error, '😎😎😎😎😎😎');
+  }
   return res.status(200).send(data || []);
 });
 
@@ -179,10 +183,16 @@ router.put('/visits/:id', currentUser, withAuth, async (req: Request, res: Respo
   // create unique visit for the logged in user
   // find is already visited by the logged in user
   const visited = await Visits.findOne({ user: req.currentUser!.id, url: req.params.id });
-  const useragent = req.headers['user-agent'];
-  const device: DeviceDetails = deviceDetector.detect(useragent);
+  let device: DeviceDetails | undefined;
+  let useragent: string | undefined;
+  try {
+    useragent = req.headers['user-agent'];
+    device = deviceDetector.detect(useragent);
+  } catch (error) {
+    console.log(error);
+  }
 
-  if (visited) return res.status(200); // return early if the website is already visited
+  if (visited) return res.status(201).send(); // return early if the website is already visited
 
   const { latitude, longitude }: { latitude: string; longitude: string } = req.body.coordinates || {};
   let info: ILocation | null = null;
@@ -200,11 +210,17 @@ router.put('/visits/:id', currentUser, withAuth, async (req: Request, res: Respo
   const visit = Visits.build({
     url: url.id,
     user: req.currentUser!.id,
-    analytics: device,
+    analytics: device || {},
     location: info ? `${info.locality}, ${info.county}, ${info.country}` : '',
   });
   await visit.save();
-  return res.status(201);
+  return res.status(201).send();
+});
+
+// only for testing
+router.get('/test/details/:id', currentUser, withAuth, async (req: Request, res: Response) => {
+  const url = await Url.findById(req.params.id);
+  return res.send(url);
 });
 
 export { router as urlRoutes };

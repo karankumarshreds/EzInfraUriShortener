@@ -197,3 +197,40 @@ describe('DELETE URL', () => {
     await request(app).get(`/api/url/testing`).set('Cookie', user1).expect(200);
   });
 });
+
+describe('VIEWS COUNT', () => {
+  it('increments total views count', async () => {
+    const user1 = await signinMiddleware({});
+    const response = await request(app)
+      .post('/api/url')
+      .set('Cookie', user1)
+      .send({
+        url: 'https://youtube.com',
+        shortUrl: 'testing',
+      })
+      .expect(201);
+    for (let i = 0; i < 2; i++) {
+      await request(app).put(`/api/url/visits/${response.body.id}`).set('Cookie', user1).send({}).expect(201);
+    }
+    const res = await request(app).get(`/api/url/test/details/${response.body.id}`).set('Cookie', user1).expect(200);
+    expect(res.body.views).toEqual(2);
+  });
+
+  it('increments views count on analytics request', async () => {
+    const user1 = await signinMiddleware({});
+    const response = await request(app)
+      .post('/api/url')
+      .set('Cookie', user1)
+      .send({
+        url: 'https://youtube.com',
+        shortUrl: 'testing',
+      })
+      .expect(201);
+    for (let i = 0; i < 2; i++) {
+      await request(app).put(`/api/url/visits/${response.body.id}`).set('Cookie', user1).send({}).expect(201);
+    }
+    const res = await request(app).get(`/api/url/`).set('Cookie', user1).expect(200);
+    expect(res.body[0].visits.length).toEqual(1);
+    expect(res.body[0].views).toEqual(2);
+  });
+});
