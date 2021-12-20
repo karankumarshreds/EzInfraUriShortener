@@ -31,7 +31,7 @@ const Signup: React.FC = () => {
   });
 
   const { errors, errorsMap, pending, makeRequest } = useRequest<UserPayload>({
-    url: 'http://localhost:5000/api/auth/signup',
+    url: '/api/auth/signup',
     method: 'post',
     payload: { ...state },
     onSuccess: (data) => {
