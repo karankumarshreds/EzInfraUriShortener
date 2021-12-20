@@ -56,6 +56,8 @@ input {
 
 .wrapper {
   min-width: min(40rem, 100%);
+  animation: fade-in 1.5s ease-in;
+  animation-fill-mode: both;
 }
 
 .box {
@@ -136,6 +138,8 @@ input {
 .img__lg,
 .img__sm {
   animation: fade-in 2s ease-in;
+  animation-delay: 1s;
+  animation-fill-mode: both;
 }
 
 .bottom__half {
